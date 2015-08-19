@@ -130,29 +130,32 @@ namespace CommandParser.Commands
                         if (inputList[i + 1].Contains("p") || inputList[i + 1].Contains("br"))
                         {
                             inputList[i] = "\r\n";
-                            result += inputList[i];
                             for (int times = 0; times < 2; times++) inputList.Remove(inputList[i + 1]);
                         } 
                         //__________________________
                         
                         else if (inputList[i + 1].Contains("li") && inputList[i + 1] != "/li")
                         {
-                            inputList[i] = "\r\n    * ";
-                            result += inputList[i];
+                            if (inputList[i + 2] == ">" && inputList[i + 3] != "<")
+                            {
+                                 inputList[i] = "\r\n    * ";
+                           
                             for (int times = 0; times < 2; times++) inputList.Remove(inputList[i + 1]);
+                            }
+                           
                         }
                         //_________________________
                         else for (int times = 0; times < 3; times++) inputList.Remove(inputList[i]);
                         break;
 
                     case "&quot;":
-                        result += inputList[i] = "\"";
+                        inputList[i] = "\"";
                         break;
 
                     default:
-                        result += inputList[i] + " ";
                         break;
                 }
+                result += inputList[i];
             }
             return result;
         }
