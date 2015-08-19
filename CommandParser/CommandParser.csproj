@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Clear.cs" />
+    <Compile Include="Commands\Rss.cs" />
     <Compile Include="Factory\CommandBuilder.cs" />
     <Compile Include="Commands\Factorial.cs" />
     <Compile Include="Flag.cs" />

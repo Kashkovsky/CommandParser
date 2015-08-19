@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandParser.Commands;
 
 namespace CommandParser
 {
@@ -19,6 +20,7 @@ namespace CommandParser
             {"-print",  new Print() },
             {"-clear",  new Clear() },
             {"-fact",   new Factorial() },
+            {"-rss",    new Rss() },
         };
 
         public Command Create(string flag)
