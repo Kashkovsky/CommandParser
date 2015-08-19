@@ -104,7 +104,7 @@ namespace CommandParser.Commands
         }
         private void Menu()
         {
-            Console.WriteLine("[R: refresh] [<number>: load issue] [X: quit]");
+            Console.WriteLine("[R: refresh (back to the issues list)] [<number>: load issue] [X: quit]");
             string responce = Console.ReadLine();
             if (!ShowIssue(responce))
             {
@@ -121,6 +121,8 @@ namespace CommandParser.Commands
                     default:
                         Console.WriteLine($"Unknown command <{responce}> for RSS Reader.\n" + 
                                             "If you need any base command, exit RSS Reader first.");
+                        Thread.Sleep(1500);
+                        Refresh();
                         break;
                 }
             }
