@@ -5,6 +5,7 @@ using System.Net;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace CommandParser.Commands
 {
@@ -18,7 +19,7 @@ namespace CommandParser.Commands
         
         string[,] rssData = null;
         public override void Do(IEnumerable<string> flagArguments)
-        {
+        {  
             if (flagArguments.Count() > 0)
             {
                 path = flagArguments.First();
@@ -29,6 +30,7 @@ namespace CommandParser.Commands
 
         private string[,] getRssData (string channel)
         {
+            Console.WriteLine("LOADING FEED... Please wait.");
             XmlNodeList items;
             try
             {
@@ -41,16 +43,28 @@ namespace CommandParser.Commands
             }
             catch (UriFormatException)
             {
+                Console.Clear();
+                
+                    Console.WriteLine("\n");
+                    Console.WriteLine($"Error: {channel} doesn't seem to be a valid feed URL. Exiting.");
+                    Thread.Sleep(1500);
+
+                Console.Clear();
                 Flag flag = new Flag("-help");
                 flag.Do();
-                Console.WriteLine($"Error: {channel} doesn't seem to be a valid feed URL.");
                 return null;
             }
             catch (Exception ex)
             {
+                Console.Clear();
+                
+                    Console.WriteLine("\n");
+                    Console.WriteLine($"Cannot load feed. Why? {ex.Message}");
+                    Thread.Sleep(1500);
+                    
+                Console.Clear();
                 Flag flag = new Flag("-help");
                 flag.Do();
-                Console.WriteLine($"Cannot load feed. Why? {ex.Message}");
                 return null;
             }
             
@@ -60,6 +74,7 @@ namespace CommandParser.Commands
                 XmlNode rssNode;
 
                 rssNode = items.Item(i).SelectSingleNode("title");
+                
                 if (rssNode != null) tempRssData[i, 0] = rssNode.InnerText;
                 else tempRssData[i, 0] = "";
 
@@ -75,10 +90,10 @@ namespace CommandParser.Commands
         }
         private void Refresh()
         {
-            Console.Clear();
             rssData = getRssData(path);
             if (rssData != null)
             {
+                Console.Clear();
                 for (int i = 0; i < rssData.GetLength(0); i++)
                 {
                     Console.WriteLine($"#{i} {rssData[i, 0]}");
@@ -117,8 +132,10 @@ namespace CommandParser.Commands
             {
                 if (rssData[issueNumber, 1] != null)
                 {
+                    
+                    string title = ToPlainText(rssData[issueNumber, 0]);
                     string description = ToPlainText(rssData[issueNumber, 1]);
-                    Console.WriteLine(rssData[issueNumber, 0]);
+                    Console.WriteLine(title);
                     Console.WriteLine(description);
                     Menu();
                     return true;
@@ -140,7 +157,7 @@ namespace CommandParser.Commands
                      + ")";
             string[] inputToArray = Regex.Split(input, pattern);
             List<string> inputList = inputToArray.ToList();
-            
+
             for (int i = 0; i < inputList.Count; i++)
             {
                 switch (inputList[i])
@@ -154,18 +171,18 @@ namespace CommandParser.Commands
                         {
                             inputList[i] = "\r\n";
                             for (int times = 0; times < 2; times++) inputList.Remove(inputList[i + 1]);
-                        } 
+                        }
                         //__________________________
-                        
+
                         else if (inputList[i + 1].Contains("li") && inputList[i + 1] != "/li")
                         {
                             if (inputList[i + 2] == ">" && inputList[i + 3] != "<")
                             {
-                                 inputList[i] = "\r\n    * ";
-                           
-                            for (int times = 0; times < 2; times++) inputList.Remove(inputList[i + 1]);
+                                inputList[i] = "\r\n    * ";
+
+                                for (int times = 0; times < 2; times++) inputList.Remove(inputList[i + 1]);
                             }
-                           
+
                         }
                         //_________________________
                         else for (int times = 0; times < 3; times++) inputList.Remove(inputList[i]);
