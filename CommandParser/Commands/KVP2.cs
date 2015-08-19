@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CommandParser
+namespace CommandParser.Commands
 {
     class KVP2 : Command
     {
@@ -28,7 +28,7 @@ namespace CommandParser
                         else
                         {
                             Console.WriteLine($"Error: You've entered at least 2 same keys. ({printable[i]}). \n"
-                                                + "Only the first Pair with this Key will be taken.");
+                                                + "Only the first Pair within this Key will be taken.");
                         }
                         
                     }

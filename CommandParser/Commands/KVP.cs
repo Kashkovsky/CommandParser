@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CommandParser
+namespace CommandParser.Commands
 {
     class KVP : Command
     {
@@ -30,13 +30,13 @@ namespace CommandParser
                            if (i + 1 < printable.Count && !int.TryParse(printable[i + 1], out key2))
                                 {
                                 if (!dict.ContainsKey(key1)) dict.Add(key1, printable[i + 1]); 
-                                else Console.WriteLine($"You entered the same Key twice : {key1}. \nOnly the first Pair with this Key will be taken.");
+                                else Console.WriteLine($"You entered the same Key twice : {key1}. \nOnly the first Pair within this Key will be taken.");
                                 i += 2;
                             }
                            else
                                 {
                                 if (!dict.ContainsKey(key1)) dict.Add(key1, "null");
-                                else Console.WriteLine($"You entered the same Key twice : {key1}. \nOnly the first Pair with this Key will be taken.");
+                                else Console.WriteLine($"You entered the same Key twice : {key1}. \nOnly the first Pair within this Key will be taken.");
                                 i++;
                                 } 
                         }
