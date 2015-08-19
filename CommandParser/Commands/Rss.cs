@@ -38,14 +38,18 @@ namespace CommandParser.Commands
                 rssDoc.Load(rssStream);
                 items = rssDoc.SelectNodes("rss/channel/item");
             }
-            catch (UriFormatException ex)
+            catch (UriFormatException)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Flag flag = new Flag("-help");
+                flag.Do();
+                Console.WriteLine($"Error: {channel} doesn't seem to be a valid feed URL.");
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot load feed. Reason : {ex.Message}");
+                Flag flag = new Flag("-help");
+                flag.Do();
+                Console.WriteLine($"Cannot load feed. Why? {ex.Message}");
                 return null;
             }
             
@@ -177,6 +181,11 @@ namespace CommandParser.Commands
                 result += inputList[i];
             }
             return result;
+        }
+
+        public override string ToString()
+        {
+            return "opens RSS feed from given URL. Use -rss <feed url>";
         }
     }
 }
