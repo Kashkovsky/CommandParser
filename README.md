@@ -10,5 +10,4 @@ To add a new command:
   
   PS: no need to update Help or any other file.
 
-Task solution for Kottans
 
