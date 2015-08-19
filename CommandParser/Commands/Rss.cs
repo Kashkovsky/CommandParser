@@ -24,6 +24,7 @@ namespace CommandParser.Commands
                 path = flagArguments.First();
                 Refresh();
             }
+            else Console.WriteLine("You should give an URL for -rss command.");
         }
 
         private string[,] getRssData (string channel)
@@ -52,7 +53,6 @@ namespace CommandParser.Commands
                 Console.WriteLine($"Cannot load feed. Why? {ex.Message}");
                 return null;
             }
-            
             
             string[,] tempRssData = new string[items.Count, 3];
             for (int i = 0; i < items.Count; i++)
