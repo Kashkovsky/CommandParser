@@ -28,12 +28,28 @@ namespace CommandParser.Commands
 
         private string[,] getRssData (string channel)
         {
-            WebRequest request = WebRequest.Create(channel);
-            WebResponse responce = request.GetResponse();
-            Stream rssStream = responce.GetResponseStream();
-            XmlDocument rssDoc = new XmlDocument();
-            rssDoc.Load(rssStream);
-            XmlNodeList items = rssDoc.SelectNodes("rss/channel/item");
+            XmlNodeList items;
+            try
+            {
+                WebRequest request = WebRequest.Create(channel);
+                WebResponse responce = request.GetResponse();
+                Stream rssStream = responce.GetResponseStream();
+                XmlDocument rssDoc = new XmlDocument();
+                rssDoc.Load(rssStream);
+                items = rssDoc.SelectNodes("rss/channel/item");
+            }
+            catch (UriFormatException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Cannot load feed. Reason : {ex.Message}");
+                return null;
+            }
+            
+            
             string[,] tempRssData = new string[items.Count, 3];
             for (int i = 0; i < items.Count; i++)
             {
@@ -57,12 +73,15 @@ namespace CommandParser.Commands
         {
             Console.Clear();
             rssData = getRssData(path);
-            for (int i = 0; i < rssData.GetLength(0); i++)
+            if (rssData != null)
             {
-                Console.WriteLine($"#{i} {rssData[i, 0]}");
+                for (int i = 0; i < rssData.GetLength(0); i++)
+                {
+                    Console.WriteLine($"#{i} {rssData[i, 0]}");
+                }
+                Console.WriteLine();
+                Menu();
             }
-            Console.WriteLine();
-            Menu();
         }
         private void Menu()
         {
