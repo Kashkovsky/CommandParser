@@ -61,7 +61,7 @@ namespace CommandParser
                     result += " - " + item.Value.ToString() + "\r\n";
                 }
             }
-            if (String.IsNullOrEmpty(result)) return "There's no reference for requested command in the database";
+            if (String.IsNullOrEmpty(result)) return $"There's no reference for requested command <{command}> in the database";
             else return result;
         }
     }
