@@ -13,7 +13,7 @@ namespace CommandParser
             // Run app with some arguments
             if (args.Length != 0)
             {
-                ProcessWithRegEx(args);
+                LaunchWithArgs(args);
                 //alternatively one can use the old method Process(args);
             }
             //Run app with no arguments
@@ -72,51 +72,14 @@ namespace CommandParser
                 
             }    
         }
-        public static void ProcessWithRegEx(string[]startArgs)
+        public static void LaunchWithArgs(string[]startArgs)
         {
             string input = "";
             foreach (var item in startArgs)
             {
                 input += $"{item} ";
             }
-            List<string[]> commands = new List<string[]>();
-            string patternwithArgs = "(-[A-Za-z,;'\"\\s\\d]+)|(-\\w+)/g";
-            string[] temp = Regex.Split(input, patternwithArgs, RegexOptions.IgnorePatternWhitespace);
-
-            for (int i = 0; i < temp.Length; i++)
-            {
-                string command = "";
-                List<string> args = new List<string>();
-                if (!String.IsNullOrEmpty(temp[i]))
-                {
-                    string[] tempArray = temp[i].Split(default(string[]), StringSplitOptions.RemoveEmptyEntries);
-                    command = tempArray[0];
-                    Flag flag = new Flag(command);
-                    if (tempArray.Length > 1 && !flag.IsHelp)
-                    {
-                        for (int j = 1; j < tempArray.Length; j++)
-                        {
-                            flag.commandArgs.Add(tempArray[j]);
-                        }
-                    }
-                    else if (flag.IsHelp)
-                    {
-                        for (int h = i + 1; h < temp.Length; h++)
-                        {
-                            if (!String.IsNullOrEmpty(temp[h]))
-                            {
-                                string[] helpArgs = temp[h].Split(default(string[]), StringSplitOptions.RemoveEmptyEntries);
-                                flag.commandArgs.Add(helpArgs[0]);
-                                i = temp.Length;
-                            }
-                        }
-                        flag.Do();
-                        flag = null;
-                    }
-                    if (flag != null) flag.Do();
-                }
-
-            }
+            ProcessWithRegEx(input);
         }
 
 
